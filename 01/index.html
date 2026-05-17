@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
+    <meta
+      name="description"
+      content="Matheus Freitas - Desenvolvedor Backend especializado em Node.js, APIs e soluções escaláveis"
+    />
+    <meta name="author" content="Matheus Freitas" />
+    <meta
+      name="keywords"
+      content="desenvolvedor backend, node.js, javascript, APIs, portfólio"
+    />
+    <title>Matheus Freitas | Desenvolvedor Backend</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #0a0a0b;
+        color: #e5e5e5;
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+
+      /* ========================================
+            MODAL DE ENTRADA BIFURCADO
+        ======================================== */
+      .entry-modal {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #0a0a0b 0%, #1a1a1b 100%);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 1rem;
+      }
+
+      .entry-modal.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .entry-content {
+        text-align: center;
+        max-width: 700px;
+        width: 100%;
+        padding: 2rem 1.5rem;
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .path-button {
+        position: relative;
+        padding: 1.25rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border: 2px solid #3b82f6;
+        background: transparent;
+        color: #fff;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        text-transform: none;
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .path-button::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: -1;
+      }
+
+      .path-button:hover::before {
+        transform: scaleX(1);
+      }
+
+      .path-button:hover {
+        border-color: #60a5fa;
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.5),
+          0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-3px);
+      }
+
+      .path-button:active {
+        transform: translateY(-1px);
+      }
+
+      /* ========================================
+            SEÇÕES VISÍVEIS POR CAMINHO
+        ======================================== */
+      section[data-path] {
+        display: none;
+      }
+
+      section[data-path].visible {
+        display: block;
+        animation: fadeInUp 0.6s ease forwards;
+      }
+
+      /* ========================================
+            ANIMAÇÕES
+        ======================================== */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* ========================================
+            HEADER FIXO COM MENU HAMBURGER
+        ======================================== */
+      .main-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(10, 10, 11, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+      }
+
+      .main-header.scrolled {
+        padding: 0.75rem 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .nav-desktop {
+        display: flex;
+        gap: 2.5rem;
+      }
+
+      .nav-link {
+        color: #9ca3af;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        font-weight: 500;
+        position: relative;
+        padding: 0.5rem 0;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #3b82f6;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover {
+        color: #3b82f6;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      /* MENU HAMBURGER */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 8px;
+        z-index: 1001;
+      }
+
+      .hamburger span {
+        width: 28px;
+        height: 3px;
+        background: #e5e5e5;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+
+      .nav-mobile {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(10, 10, 11, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 80px 2rem 2rem;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 999;
+        border-left: 1px solid rgba(59, 130, 246, 0.2);
+        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+      }
+
+      .nav-mobile.active {
+        right: 0;
+      }
+
+      .nav-mobile .nav-link {
+        display: block;
+        padding: 1rem 0;
+        font-size: 1.125rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .nav-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* ========================================
+            CARDS DE PROJETO
+        ======================================== */
+      .project-card {
+        font: inherit;
+        text-align: left;
+        width: 100%;
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #1a1a1b;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+
+      .project-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.1) 0%,
+          transparent 100%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+
+      .project-card:hover::before {
+        opacity: 1;
+      }
+
+      .project-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+      }
+
+      .project-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .project-card:hover img {
+        transform: scale(1.08);
+      }
+
+      /* ========================================
+            MODAL DE PROJETO
+        ======================================== */
+      .project-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        padding: 1rem;
+        backdrop-filter: blur(10px);
+        overflow-y: auto;
+      }
+
+      .project-modal.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background: #1a1a1b;
+        border-radius: 24px;
+        max-width: 950px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        animation: modalZoomIn 0.3s ease;
+        margin: auto;
+      }
+
+      @keyframes modalZoomIn {
+        from {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .modal-backdrop {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 24px 24px 0 0;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.9);
+        border: none;
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      .close-modal:hover {
+        background: #3b82f6;
+        transform: rotate(90deg);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+      }
+
+      /* ========================================
+            CARDS DE CERTIFICADO COM FLIP
+        ======================================== */
+      .cert-card {
+        position: relative;
+        width: 100%;
+        height: 280px;
+        perspective: 1000px;
+      }
+
+      .cert-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+      }
+
+      .cert-card:hover .cert-inner {
+        transform: rotateY(180deg);
+      }
+
+      .cert-front,
+      .cert-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .cert-front {
+        background: #1a1a1b;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .cert-back {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        transform: rotateY(180deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      /* ========================================
+            API SANDBOX
+        ======================================== */
+      .sandbox-container {
+        background: linear-gradient(135deg, #1a1a1b 0%, #0f0f10 100%);
+        border: 2px solid rgba(59, 130, 246, 0.3);
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      }
+
+      .github-card {
+        background: #0f0f10;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 20px;
+        padding: 2rem;
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .github-card:hover {
+        border-color: rgba(59, 130, 246, 0.5);
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+      }
+
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          #1a1a1b 25%,
+          #2a2a2b 50%,
+          #1a1a1b 75%
+        );
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+
+      @keyframes loading {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* ========================================
+            CODE BLOCK
+        ======================================== */
+      .code-block {
+        background: #0d0d0e;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 16px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        font-family: "Monaco", "Courier New", monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .code-keyword {
+        color: #c678dd;
+        font-weight: 600;
+      }
+      .code-function {
+        color: #61afef;
+      }
+      .code-string {
+        color: #98c379;
+      }
+      .code-comment {
+        color: #5c6370;
+        font-style: italic;
+      }
+      .code-number {
+        color: #d19a66;
+      }
+      .code-operator {
+        color: #56b6c2;
+      }
+
+      /* ========================================
+            BOTÕES
+        ======================================== */
+      .btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: #fff;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        text-decoration: none;
+        min-height: 48px;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      }
+
+      .btn-primary:active {
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #fff;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+        text-decoration: none;
+        min-height: 48px;
+      }
+
+      .btn-secondary:hover {
+        border-color: #3b82f6;
+        background: rgba(59, 130, 246, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+      }
+
+      /* ========================================
+            TECH TAGS
+        ======================================== */
+      .tech-tag {
+        display: inline-block;
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .tech-tag:hover {
+        background: rgba(59, 130, 246, 0.25);
+        border-color: rgba(59, 130, 246, 0.5);
+        transform: translateY(-2px);
+      }
+
+      /* ========================================
+            INPUT FIELD
+        ======================================== */
+      .input-field {
+        flex: 1;
+        min-width: 200px;
+        padding: 1rem 1.5rem;
+        background: #0f0f10;
+        border: 2px solid rgba(59, 130, 246, 0.3);
+        border-radius: 12px;
+        color: #fff;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: "Inter", sans-serif;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+      }
+
+      .input-field::placeholder {
+        color: #6b7280;
+      }
+
+      /* ========================================
+            FOOTER
+        ======================================== */
+      footer {
+        background: #0f0f10;
+        border-top: 1px solid rgba(59, 130, 246, 0.1);
+        margin-top: 4rem;
+      }
+
+      /* ========================================
+            SCROLLBAR
+        ======================================== */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #0a0a0b;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+        border-radius: 6px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+      }
+
+      /* ========================================
+            RESPONSIVIDADE MOBILE
+        ======================================== */
+      @media (max-width: 1024px) {
+        .intro-grid {
+          grid-template-columns: 1fr !important;
+          text-align: center;
+          gap: 3rem !important;
+        }
+
+        .intro-grid img {
+          margin: 0 auto;
+          max-width: 350px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        /* Header Mobile */
+        .nav-desktop {
+          display: none;
+        }
+
+        .hamburger {
+          display: flex;
+        }
+
+        /* Entry Modal */
+        .entry-content {
+          padding: 1.5rem 1rem;
+        }
+
+        .entry-content h1 {
+          font-size: 2rem !important;
+        }
+
+        .entry-content h2 {
+          font-size: 1.25rem !important;
+        }
+
+        .entry-content p {
+          font-size: 1rem !important;
+        }
+
+        .path-button {
+          padding: 1.25rem 1.5rem;
+          font-size: 0.95rem;
+          max-width: 100%;
+        }
+
+        /* Intro Section */
+        .intro-grid h1 {
+          font-size: 2.5rem !important;
+        }
+
+        .intro-grid p {
+          font-size: 1rem !important;
+        }
+
+        /* Sandbox */
+        .sandbox-container {
+          padding: 1.5rem;
+        }
+
+        .github-card {
+          flex-direction: column;
+          text-align: center;
+          padding: 1.5rem;
+          gap: 1.5rem;
+        }
+
+        /* Modal */
+        .modal-content {
+          margin: 0.5rem;
+          border-radius: 16px;
+        }
+
+        .modal-backdrop {
+          height: 200px;
+        }
+
+        .close-modal {
+          width: 36px;
+          height: 36px;
+          top: 0.75rem;
+          right: 0.75rem;
+        }
+
+        /* Buttons */
+        .btn-primary,
+        .btn-secondary {
+          width: 100%;
+          padding: 1rem 1.5rem;
+        }
+
+        /* Code Block */
+        .code-block {
+          font-size: 0.75rem;
+          padding: 1rem;
+        }
+
+        /* Project Cards */
+        .project-card img {
+          height: 180px;
+        }
+
+        .project-card:hover {
+          transform: translateY(-6px);
+        }
+
+        /* Cert Cards */
+        .cert-card {
+          height: 240px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        /* Typography */
+        .entry-content h1 {
+          font-size: 1.75rem !important;
+        }
+
+        .intro-grid h1 {
+          font-size: 2rem !important;
+        }
+
+        h2 {
+          font-size: 1.75rem !important;
+        }
+
+        h3 {
+          font-size: 1.25rem !important;
+        }
+
+        /* Spacing */
+        section {
+          padding: 3rem 1rem !important;
+        }
+
+        /* Path Buttons */
+        .path-button {
+          padding: 1rem 1.25rem;
+          font-size: 0.9rem;
+        }
+
+        /* Input */
+        .input-field {
+          min-width: 100%;
+        }
+
+        /* Tech Tags */
+        .tech-tag {
+          font-size: 0.75rem;
+          padding: 0.4rem 0.8rem;
+        }
+      }
+
+      /* ========================================
+            LANDSCAPE MOBILE
+        ======================================== */
+      @media (max-height: 500px) and (orientation: landscape) {
+        .entry-content {
+          padding: 1rem;
+        }
+
+        .entry-content h1 {
+          font-size: 1.5rem !important;
+          margin-bottom: 0.5rem !important;
+        }
+
+        .path-button {
+          padding: 0.75rem 1.5rem;
+        }
+      }
+
+      /* ========================================
+            EFEITOS ESPECIAIS
+        ======================================== */
+      .glow-effect {
+        position: relative;
+      }
+
+      .glow-effect::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+        filter: blur(10px);
+      }
+
+      .glow-effect:hover::before {
+        opacity: 0.7;
+      }
+
+      /* Touch device optimizations */
+      @media (hover: none) and (pointer: coarse) {
+        .project-card:hover {
+          transform: none;
+        }
+
+        .project-card:active {
+          transform: scale(0.98);
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover {
+          transform: none;
+        }
+
+        .btn-primary:active,
+        .btn-secondary:active {
+          transform: scale(0.96);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="entry-modal" id="entryModal">
+      <div class="entry-content">
+        <div style="margin-bottom: 1.5rem">
+          <div
+            style="
+              width: 70px;
+              height: 70px;
+              background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+              border-radius: 50%;
+              margin: 0 auto 1rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+            "
+          >
+            <i
+              data-lucide="code-2"
+              style="width: 36px; height: 36px; color: #fff"
+            ></i>
+          </div>
+        </div>
+
+        <h1
+          style="
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, #fff 0%, #9ca3af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          "
+        >
+          Matheus Freitas
+        </h1>
+
+        <p
+          style="
+            font-size: 1.25rem;
+            color: #3b82f6;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+          "
+        >
+          Desenvolvedor Backend
+        </p>
+
+        <p
+          style="
+            color: #9ca3af;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          Criando soluções escaláveis e de alto desempenho com Node.js
+        </p>
+
+        <h2
+          style="
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #e5e5e5;
+          "
+        >
+          Qual sua jornada hoje?
+        </h2>
+
+        <div
+          style="
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <button
+            class="path-button glow-effect"
+            onclick="selectPath('recruiter')"
+          >
+            <span style="font-size: 1.5rem; margin-right: 0.5rem">🎯</span>
+            Sou Recrutador
+          </button>
+          <button
+            class="path-button glow-effect"
+            onclick="selectPath('visitor')"
+          >
+            <span style="font-size: 1.5rem; margin-right: 0.5rem">🚀</span>
+            Sou Dev / Visitante
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-overlay" id="navOverlay" onclick="toggleMobileMenu()"></div>
+
+    <header class="main-header" id="mainHeader" style="display: none">
+      <div
+        style="
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div
+          style="
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          "
+        >
+          MF
+        </div>
+
+        <nav class="nav-desktop">
+          <a href="#intro" class="nav-link">Início</a>
+          <a href="#projects" class="nav-link">Projetos</a>
+          <a href="#contact" class="nav-link">Contato</a>
+        </nav>
+
+        <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <nav class="nav-mobile" id="navMobile">
+        <a href="#intro" class="nav-link" onclick="toggleMobileMenu()"
+          >Início</a
+        >
+        <a href="#projects" class="nav-link" onclick="toggleMobileMenu()"
+          >Projetos</a
+        >
+        <a href="#contact" class="nav-link" onclick="toggleMobileMenu()"
+          >Contato</a
+        >
+      </nav>
+    </header>
+
+    <main style="padding-top: 70px">
+      <section
+        id="intro"
+        data-path="recruiter visitor"
+        style="
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 3rem 1.5rem;
+        "
+      >
+        <div
+          class="intro-grid"
+          style="
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+          "
+        >
+          <div style="position: relative">
+            <div
+              style="
+                position: absolute;
+                top: -20px;
+                right: -20px;
+                width: 200px;
+                height: 200px;
+                background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+                border-radius: 50%;
+                opacity: 0.1;
+                filter: blur(60px);
+                animation: pulse 3s infinite;
+              "
+            ></div>
+            <img
+              src="./matheus.jpeg"
+              alt="Matheus Freitas"
+              style="
+                width: 100%;
+                max-width: 450px;
+                border-radius: 24px;
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                  0 0 0 1px rgba(59, 130, 246, 0.2);
+                position: relative;
+              "
+            />
+          </div>
+          <div>
+            <div
+              style="
+                display: inline-block;
+                background: rgba(59, 130, 246, 0.15);
+                padding: 0.5rem 1.25rem;
+                border-radius: 50px;
+                margin-bottom: 1.5rem;
+                border: 1px solid rgba(59, 130, 246, 0.3);
+              "
+            >
+              <span
+                style="color: #60a5fa; font-weight: 600; font-size: 0.875rem"
+                >DISPONÍVEL PARA OPORTUNIDADES</span
+              >
+            </div>
+
+            <h1
+              style="
+                font-size: 3.5rem;
+                font-weight: 900;
+                line-height: 1.1;
+                margin-bottom: 1.5rem;
+              "
+            >
+              Desenvolvedor<br />
+              <span
+                style="
+                  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                "
+              >
+                Backend
+              </span>
+            </h1>
+
+            <p
+              style="
+                font-size: 1.125rem;
+                color: #9ca3af;
+                line-height: 1.8;
+                margin-bottom: 2.5rem;
+              "
+            >
+              Meu foco é criar soluções digitais
+              <strong style="color: #e5e5e5; font-weight: 600"
+                >eficientes, escaláveis e de alto desempenho</strong
+              >. Com experiência sólida em
+              <strong style="color: #60a5fa">Node.js, Java e APIs</strong
+              >, busco sempre otimizar processos e garantir a confiabilidade dos
+              sistemas que desenvolvo.
+            </p>
+
+            <div
+              style="
+                display: flex;
+                gap: 2rem;
+                flex-wrap: wrap;
+                margin-bottom: 3rem;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 0.75rem">
+                <div
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    background: rgba(59, 130, 246, 0.15);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px solid rgba(59, 130, 246, 0.3);
+                  "
+                >
+                  <i
+                    data-lucide="briefcase"
+                    style="width: 20px; height: 20px; color: #60a5fa"
+                  ></i>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 0.75rem;
+                      color: #6b7280;
+                      text-transform: uppercase;
+                      letter-spacing: 0.05em;
+                      font-weight: 600;
+                    "
+                  >
+                    Experiência
+                  </div>
+                  <div style="color: #e5e5e5; font-weight: 600">+ 3 Anos</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 0.75rem">
+                <div
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    background: rgba(59, 130, 246, 0.15);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px solid rgba(59, 130, 246, 0.3);
+                  "
+                >
+                  <i
+                    data-lucide="map-pin"
+                    style="width: 20px; height: 20px; color: #60a5fa"
+                  ></i>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 0.75rem;
+                      color: #6b7280;
+                      text-transform: uppercase;
+                      letter-spacing: 0.05em;
+                      font-weight: 600;
+                    "
+                  >
+                    Localização
+                  </div>
+                  <div style="color: #e5e5e5; font-weight: 600">
+                    Minas Gerais, BR
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+              <a href="#projects" class="btn-primary">
+                Ver Projetos
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 20px; height: 20px"
+                ></i>
+              </a>
+              <a
+                href="mailto:matheusfreiitas77@gmail.com"
+                class="btn-secondary"
+              >
+                Contato
+                <i data-lucide="mail" style="width: 20px; height: 20px"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="projects"
+        data-path="recruiter visitor"
+        style="padding: 4rem 1.5rem; background: #0f0f10"
+      >
+        <div style="max-width: 1200px; margin: 0 auto">
+          <div style="text-align: center; margin-bottom: 4rem">
+            <h2
+              style="
+                font-size: 2.5rem;
+                font-weight: 900;
+                margin-bottom: 1rem;
+                background: linear-gradient(135deg, #fff 0%, #9ca3af 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              "
+            >
+              Galeria de Soluções
+            </h2>
+            <p
+              style="
+                color: #9ca3af;
+                font-size: 1.125rem;
+                max-width: 600px;
+                margin: 0 auto;
+              "
+            >
+              Projetos que demonstram experiência em desenvolvimento full-stack
+              e resolução de problemas reais
+            </p>
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: 2rem;
+            "
+          >
+            <button class="project-card" onclick="openProjectModal(0)">
+              <div style="position: relative">
+                <img
+                  src="./dashh.png"
+                  alt="Dashboard Financeiro"
+                />
+                <div
+                  style="
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    background: rgba(59, 130, 246, 0.9);
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 8px;
+                    backdrop-filter: blur(10px);
+                  "
+                >
+                  <span
+                    style="color: #fff; font-weight: 700; font-size: 0.75rem"
+                    >FEATURED</span
+                  >
+                </div>
+              </div>
+              <div style="padding: 1.5rem">
+                <h3
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  Dashboard Financeiro
+                </h3>
+                <p
+                  style="
+                    color: #9ca3af;
+                    margin-bottom: 1.5rem;
+                    line-height: 1.7;
+                  "
+                >
+                  Plataforma de análise financeira com visualização de dados em
+                  tempo real e relatórios personalizados.
+                </p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+                  <span class="tech-tag">React</span>
+                  <span class="tech-tag">Node.js</span>
+                  <span class="tech-tag">Chart.js</span>
+                </div>
+              </div>
+            </button>
+
+            <button class="project-card" onclick="openProjectModal(1)">
+              <img
+                src="https://portifoliomatheusfreiitaz.netlify.app/ecom.png"
+                alt="Loja Virtual"
+              />
+              <div style="padding: 1.5rem">
+                <h3
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  Loja Virtual
+                </h3>
+                <p
+                  style="
+                    color: #9ca3af;
+                    margin-bottom: 1.5rem;
+                    line-height: 1.7;
+                  "
+                >
+                  Sistema completo de e-commerce com carrinho, checkout e
+                  integração com pagamentos.
+                </p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+                  <span class="tech-tag">Next.js</span>
+                  <span class="tech-tag">Stripe</span>
+                  <span class="tech-tag">MongoDB</span>
+                </div>
+              </div>
+            </button>
+
+            <button class="project-card" onclick="openProjectModal(2)">
+              <img
+                src="https://portifoliomatheusfreiitaz.netlify.app/ponto.png"
+                alt="Sistema de Folha de Ponto"
+              />
+              <div style="padding: 1.5rem">
+                <h3
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  Sistema de Folha de Ponto
+                </h3>
+                <p
+                  style="
+                    color: #9ca3af;
+                    margin-bottom: 1.5rem;
+                    line-height: 1.7;
+                  "
+                >
+                  Sistema web para registro e gestão de horas de funcionários,
+                  com relatórios de produtividade.
+                </p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+                  <span class="tech-tag">Node.js</span>
+                  <span class="tech-tag">Express</span>
+                  <span class="tech-tag">Vue.js</span>
+                </div>
+              </div>
+            </button>
+
+            <button class="project-card" onclick="openProjectModal(3)">
+              <img src="./cab.png" alt="Sistema de Gestão de Tarefas" />
+              <div style="padding: 1.5rem">
+                <h3
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  Sistema de Gestão para Barbearia
+                </h3>
+                <p
+                  style="
+                    color: #9ca3af;
+                    margin-bottom: 1.5rem;
+                    line-height: 1.7;
+                  "
+                >
+                  Aplicação moderna para agendamento de horários, controle de
+                  clientes e gerenciamento de serviços de barbearia, tudo em um
+                  só lugar.
+                </p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+                  <span class="tech-tag">React</span>
+                  <span class="tech-tag">TypeScript</span>
+                  <span class="tech-tag">Tailwind CSS</span>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="contact"
+        data-path="recruiter visitor"
+        style="padding: 4rem 1.5rem"
+      >
+        <div style="max-width: 900px; margin: 0 auto">
+          <div
+            style="
+              background: linear-gradient(135deg, #1a1a1b 0%, #0f0f10 100%);
+              border-radius: 24px;
+              padding: 3rem 2rem;
+              text-align: center;
+              border: 2px solid rgba(59, 130, 246, 0.2);
+              box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            "
+          >
+            <div
+              style="
+                width: 70px;
+                height: 70px;
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                border-radius: 50%;
+                margin: 0 auto 1.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+              "
+            >
+              <i
+                data-lucide="message-circle"
+                style="width: 32px; height: 32px; color: #fff"
+              ></i>
+            </div>
+
+            <h2
+              style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem"
+            >
+              Vamos Conversar?
+            </h2>
+            <p
+              style="
+                color: #9ca3af;
+                margin-bottom: 3rem;
+                font-size: 1.125rem;
+                line-height: 1.7;
+              "
+            >
+              Estou disponível para oportunidades e colaborações em projetos
+              desafiadores.<br />
+              <strong style="color: #60a5fa"
+                >Vamos construir algo incrível juntos!</strong
+              >
+            </p>
+
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-bottom: 2.5rem;
+              "
+            >
+              <a href="mailto:matheusfreiitas77@gmail.com" class="btn-primary">
+                <i data-lucide="mail" style="width: 20px; height: 20px"></i>
+                Email
+              </a>
+              <a
+                href="https://wa.me/5531988896957"
+                target="_blank"
+                class="btn-primary"
+                style="
+                  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+                  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+                "
+              >
+                <i
+                  data-lucide="message-circle"
+                  style="width: 20px; height: 20px"
+                ></i>
+                WhatsApp
+              </a>
+              <a
+                href="https://www.linkedin.com/in/matheus-felipe77/"
+                target="_blank"
+                class="btn-secondary"
+              >
+                <i data-lucide="linkedin" style="width: 20px; height: 20px"></i>
+                LinkedIn
+              </a>
+            </div>
+
+            <button
+              class="btn-secondary glow-effect"
+              onclick="downloadResume()"
+            >
+              <i data-lucide="download" style="width: 20px; height: 20px"></i>
+              Baixar Currículo (PDF)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="certificates"
+        data-path="visitor"
+        style="padding: 4rem 1.5rem; background: #0f0f10"
+      >
+        <div style="max-width: 1200px; margin: 0 auto">
+          <div style="text-align: center; margin-bottom: 4rem">
+            <h2
+              style="
+                font-size: 2.5rem;
+                font-weight: 900;
+                margin-bottom: 1rem;
+                background: linear-gradient(135deg, #fff 0%, #9ca3af 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              "
+            >
+              Arsenal de Conhecimento
+            </h2>
+            <p
+              style="
+                color: #9ca3af;
+                font-size: 1.125rem;
+                max-width: 600px;
+                margin: 0 auto;
+              "
+            >
+              Certificações que validam minha jornada de aprendizado contínuo e
+              crescimento profissional
+            </p>
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: 2rem;
+            "
+          >
+            <div class="cert-card">
+              <div class="cert-inner">
+                <div class="cert-front">
+                  <img
+                    src="https://portifoliomatheusfreiitaz.netlify.app/certificado1.png"
+                    alt="Certificado Inovattion Academy"
+                    style="width: 100%; height: 100%; object-fit: cover"
+                  />
+                </div>
+                <div class="cert-back">
+                  <div style="text-align: center">
+                    <i
+                      data-lucide="award"
+                      style="
+                        width: 48px;
+                        height: 48px;
+                        color: #fff;
+                        margin-bottom: 1rem;
+                      "
+                    ></i>
+                    <h3
+                      style="
+                        font-size: 1.25rem;
+                        font-weight: 800;
+                        margin-bottom: 0.5rem;
+                      "
+                    >
+                      Certificado de Conclusão
+                    </h3>
+                    <p
+                      style="
+                        font-size: 0.95rem;
+                        opacity: 0.95;
+                        margin-bottom: 1rem;
+                      "
+                    >
+                      Inovattion Academy
+                    </p>
+                    <a
+                      href="https://portifoliomatheusfreiitaz.netlify.app/certificado1.png"
+                      target="_blank"
+                      style="
+                        color: #fff;
+                        text-decoration: none;
+                        font-weight: 600;
+                        border: 2px solid #fff;
+                        padding: 0.6rem 1.25rem;
+                        border-radius: 10px;
+                        display: inline-block;
+                        transition: all 0.3s ease;
+                        font-size: 0.9rem;
+                      "
+                    >
+                      Ver Credencial
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cert-card">
+              <div class="cert-inner">
+                <div
+                  class="cert-front"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #1a1a1b 0%,
+                      #2a2a2b 100%
+                    );
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    padding: 2rem;
+                  "
+                >
+                  <i
+                    data-lucide="cloud"
+                    style="
+                      width: 64px;
+                      height: 64px;
+                      color: #ff9900;
+                      margin-bottom: 1.5rem;
+                    "
+                  ></i>
+                  <h3
+                    style="
+                      font-size: 1.5rem;
+                      font-weight: 800;
+                      text-align: center;
+                    "
+                  >
+                    AWS Academy
+                  </h3>
+                  <p
+                    style="
+                      color: #9ca3af;
+                      margin-top: 0.75rem;
+                      text-align: center;
+                      font-size: 0.9rem;
+                    "
+                  >
+                    Toque para detalhes
+                  </p>
+                </div>
+                <div class="cert-back">
+                  <div style="text-align: center">
+                    <i
+                      data-lucide="award"
+                      style="
+                        width: 48px;
+                        height: 48px;
+                        color: #fff;
+                        margin-bottom: 1rem;
+                      "
+                    ></i>
+                    <h3
+                      style="
+                        font-size: 1.25rem;
+                        font-weight: 800;
+                        margin-bottom: 0.5rem;
+                      "
+                    >
+                      AWS Academy Certificate
+                    </h3>
+                    <p style="font-size: 0.95rem; opacity: 0.95">
+                      Cloud Computing Foundations
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cert-card">
+              <div class="cert-inner">
+                <div
+                  class="cert-front"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #1a1a1b 0%,
+                      #2a2a2b 100%
+                    );
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    padding: 2rem;
+                  "
+                >
+                  <i
+                    data-lucide="bar-chart"
+                    style="
+                      width: 64px;
+                      height: 64px;
+                      color: #4285f4;
+                      margin-bottom: 1.5rem;
+                    "
+                  ></i>
+                  <h3
+                    style="
+                      font-size: 1.5rem;
+                      font-weight: 800;
+                      text-align: center;
+                    "
+                  >
+                    Google Data Analytics
+                  </h3>
+                  <p
+                    style="
+                      color: #9ca3af;
+                      margin-top: 0.75rem;
+                      text-align: center;
+                      font-size: 0.9rem;
+                    "
+                  >
+                    Toque para detalhes
+                  </p>
+                </div>
+                <div class="cert-back">
+                  <div style="text-align: center">
+                    <i
+                      data-lucide="award"
+                      style="
+                        width: 48px;
+                        height: 48px;
+                        color: #fff;
+                        margin-bottom: 1rem;
+                      "
+                    ></i>
+                    <h3
+                      style="
+                        font-size: 1.25rem;
+                        font-weight: 800;
+                        margin-bottom: 0.5rem;
+                      "
+                    >
+                      Google Data Analytics
+                    </h3>
+                    <p style="font-size: 0.95rem; opacity: 0.95">
+                      Professional Certificate
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sandbox" data-path="visitor" style="padding: 4rem 1.5rem">
+        <div style="max-width: 1100px; margin: 0 auto">
+          <div style="text-align: center; margin-bottom: 3rem">
+            <div
+              style="
+                display: inline-block;
+                background: rgba(139, 92, 246, 0.15);
+                padding: 0.5rem 1.25rem;
+                border-radius: 50px;
+                margin-bottom: 1rem;
+                border: 1px solid rgba(139, 92, 246, 0.3);
+              "
+            >
+              <span
+                style="color: #a78bfa; font-weight: 600; font-size: 0.875rem"
+                >DEMONSTRAÇÃO AO VIVO</span
+              >
+            </div>
+            <h2
+              style="
+                font-size: 2.5rem;
+                font-weight: 900;
+                margin-bottom: 1rem;
+                background: linear-gradient(135deg, #fff 0%, #9ca3af 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              "
+            >
+              Laboratório de Interatividade
+            </h2>
+            <p
+              style="
+                color: #9ca3af;
+                font-size: 1.125rem;
+                max-width: 700px;
+                margin: 0 auto;
+              "
+            >
+              Uma demonstração ao vivo das minhas habilidades em
+              <strong style="color: #60a5fa">consumir APIs</strong> e
+              <strong style="color: #a78bfa">manipular o DOM</strong>
+            </p>
+          </div>
+
+          <div class="sandbox-container">
+            <h3
+              style="
+                font-size: 1.5rem;
+                font-weight: 800;
+                margin-bottom: 1.5rem;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+              "
+            >
+              <i
+                data-lucide="github"
+                style="width: 32px; height: 32px; color: #60a5fa"
+              ></i>
+              Gerador de Cartão de Perfil do GitHub
+            </h3>
+
+            <p
+              style="
+                text-align: center;
+                color: #9ca3af;
+                margin-bottom: 2rem;
+                line-height: 1.7;
+              "
+            >
+              Esta ferramenta consome a API pública do GitHub e renderiza
+              dinamicamente os dados do usuário.<br />
+              <strong style="color: #60a5fa"
+                >Digite qualquer username do GitHub e veja a mágica
+                acontecer!</strong
+              >
+            </p>
+
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 2.5rem;
+                flex-wrap: wrap;
+              "
+            >
+              <input
+                type="text"
+                id="githubUsername"
+                placeholder="Ex: torvalds, gaearon..."
+                class="input-field"
+                value="matheusfreiitaz"
+              />
+              <button
+                onclick="generateGitHubCard()"
+                class="btn-primary"
+                style="flex-shrink: 0"
+              >
+                Gerar Cartão
+                <i data-lucide="sparkles" style="width: 20px; height: 20px"></i>
+              </button>
+            </div>
+
+            <div id="cardContainer" style="margin-bottom: 2.5rem"></div>
+
+            <div id="codeSection" style="display: none">
+              <button
+                onclick="toggleCode()"
+                class="btn-secondary"
+                style="
+                  margin-bottom: 1.5rem;
+                  width: 100%;
+                  justify-content: center;
+                "
+              >
+                <i data-lucide="code-2" style="width: 20px; height: 20px"></i>
+                <span id="codeButtonText">Ver o Código por Trás</span>
+              </button>
+
+              <div id="codeBlock" style="display: none">
+                <pre
+                  class="code-block"
+                ><code><span class="code-comment">// Função JS que busca dados da API do GitHub e atualiza o DOM</span>
+<span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generateGitHubCard</span>() {
+  <span class="code-keyword">const</span> username = document.<span class="code-function">getElementById</span>(<span class="code-string">'githubUsername'</span>).value;
+  <span class="code-keyword">const</span> container = document.<span class="code-function">getElementById</span>(<span class="code-string">'cardContainer'</span>);
+
+  <span class="code-comment">// Exibe um skeleton loader para feedback visual</span>
+  container.innerHTML = <span class="code-string">'&lt;div class="skeleton"&gt;Carregando...&lt;/div&gt;'</span>;
+  
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Faz a chamada assíncrona para a API</span>
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">`https://api.github.com/users/${username}`</span>);
+    
+    <span class="code-keyword">if</span> (!response.ok) {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">'Usuário não encontrado'</span>);
+    }
+    
+    <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> response.<span class="code-function">json</span>();
+    
+    <span class="code-comment">// Manipula o DOM para renderizar o cartão com os dados</span>
+    container.innerHTML = <span class="code-string">`
+      &lt;div class="github-card"&gt;
+        &lt;img src="${data.avatar_url}" ... /&gt;
+        &lt;div&gt;
+          &lt;h3&gt;${data.name || data.login}&lt;/h3&gt;
+          &lt;p&gt;${data.bio || 'Sem bio.'}&lt;/p&gt;
+          ...
+        &lt;/div&gt;
+      &lt;/div&gt;
+    `</span>;
+
+  } <span class="code-keyword">catch</span> (error) {
+    <span class="code-comment">// Trata o erro e exibe uma mensagem amigável</span>
+    container.innerHTML = <span class="code-string">`&lt;p&gt;Erro: ${error.message}&lt;/p&gt;`</span>;
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer style="padding: 3rem 1.5rem; text-align: center">
+      <div style="max-width: 1200px; margin: 0 auto">
+        <div style="margin-bottom: 1.5rem">
+          <h3
+            style="
+              font-size: 1.75rem;
+              font-weight: 900;
+              margin-bottom: 0.75rem;
+              background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+            "
+          >
+            MF
+          </h3>
+        </div>
+        <p style="color: #9ca3af; margin-bottom: 0.5rem; font-size: 0.95rem">
+          &copy; 2026 Matheus Freitas. 
+        </p>
+        <p style="color: #5c5c5d; font-size: 0.875rem">
+          Desenvolvido com <span style="color: #ef4444">&hearts;</span>,
+          dedicação e tecnologia moderna
+        </p>
+      </div>
+    </footer>
+
+    <div class="project-modal" id="projectModal">
+      <div class="modal-content">
+        <button class="close-modal" onclick="closeProjectModal()">
+          <i data-lucide="x" style="width: 20px; height: 20px"></i>
+        </button>
+        <img id="modalBackdrop" class="modal-backdrop" src="" alt="" />
+        <div style="padding: 2rem 1.5rem">
+          <h2
+            id="modalTitle"
+            style="font-size: 2rem; font-weight: 900; margin-bottom: 1.5rem"
+          ></h2>
+          <div
+            id="modalTechStack"
+            style="
+              display: flex;
+              gap: 0.5rem;
+              flex-wrap: wrap;
+              margin-bottom: 2.5rem;
+            "
+          ></div>
+
+          <div style="margin-bottom: 2.5rem">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <div
+                style="
+                  width: 36px;
+                  height: 36px;
+                  background: rgba(239, 68, 68, 0.15);
+                  border-radius: 10px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                <i
+                  data-lucide="alert-circle"
+                  style="width: 18px; height: 18px; color: #ef4444"
+                ></i>
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: #e5e5e5">
+                O Problema
+              </h3>
+            </div>
+            <p
+              id="modalProblem"
+              style="
+                color: #9ca3af;
+                line-height: 1.8;
+                font-size: 1rem;
+                padding-left: 0;
+              "
+            ></p>
+          </div>
+
+          <div style="margin-bottom: 2.5rem">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <div
+                style="
+                  width: 36px;
+                  height: 36px;
+                  background: rgba(34, 197, 94, 0.15);
+                  border-radius: 10px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                <i
+                  data-lucide="check-circle"
+                  style="width: 18px; height: 18px; color: #22c55e"
+                ></i>
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: #e5e5e5">
+                A Solução
+              </h3>
+            </div>
+            <p
+              id="modalSolution"
+              style="
+                color: #9ca3af;
+                line-height: 1.8;
+                font-size: 1rem;
+                padding-left: 0;
+              "
+            ></p>
+          </div>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+            <a id="modalRepoLink" href="#" target="_blank" class="btn-primary">
+              <i data-lucide="github" style="width: 20px; height: 20px"></i>
+              Ver Repositório
+            </a>
+            <a
+              id="modalDemoLink"
+              href="#"
+              target="_blank"
+              class="btn-secondary"
+            >
+              <i
+                data-lucide="external-link"
+                style="width: 20px; height: 20px"
+              ></i>
+              Ver Demo Ao Vivo
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // =================================================================
+      // DADOS DOS PROJETOS
+      // =================================================================
+      const projects = [
+        {
+          title: "Dashboard Financeiro",
+          image: "https://portifoliomatheusfreiitaz.netlify.app/dash.png",
+          techStack: ["React", "Node.js", "Chart.js"],
+          problem:
+            "Empresas e indivíduos enfrentam dificuldades em visualizar e analisar seus dados financeiros de forma clara e em tempo real, resultando em decisões menos informadas e oportunidades perdidas de otimização financeira.",
+          solution:
+            "Desenvolvi uma plataforma web intuitiva que integra APIs financeiras, processa dados em tempo real e os apresenta através de gráficos interativos e relatórios customizáveis. A solução permite análises rápidas e precisas, facilitando a tomada de decisões estratégicas.",
+          repoUrl: "https://github.com/matheusfreiitaz/purple-finance-",
+          demoUrl: "https://gestaofinanceira77.netlify.app/",
+        },
+        {
+          title: "Loja Virtual",
+          image: "https://portifoliomatheusfreiitaz.netlify.app/ecom.png",
+          techStack: ["Next.js", "Stripe", "MongoDB"],
+          problem:
+            "Pequenos comerciantes precisam de uma solução completa de e-commerce que seja escalável, segura e fácil de gerenciar, mas as plataformas proprietárias cobram altos custos mensais e impõem limitações técnicas.",
+          solution:
+            "Criei um sistema completo de e-commerce com carrinho de compras responsivo, gestão de estoque em tempo real, integração segura com gateway de pagamento Stripe e painel administrativo intuitivo. A solução oferece uma experiência de compra fluida e segura para os clientes.",
+          repoUrl: "https://github.com/matheusfreiitaz/simpleShop",
+          demoUrl: "https://matheusfreiitaz.github.io/simpleShop/",
+        },
+        {
+          title: "Sistema de Folha de Ponto",
+          image: "https://portifoliomatheusfreiitaz.netlify.app/ponto.png",
+          techStack: ["Node.js", "Express", "MongoDB", "Vue.js"],
+          problem:
+            "O controle manual de horas trabalhadas é propenso a erros humanos, fraudes e dificuldades na gestão eficiente de recursos humanos, causando problemas nos cálculos de folha de pagamento e compliance trabalhista.",
+          solution:
+            "Implementei um sistema web robusto com autenticação segura de usuários, registro de ponto em tempo real com geolocalização, geração automática de relatórios de produtividade e exportação de dados em múltiplos formatos, automatizando completamente o processo de controle de jornada.",
+          repoUrl: "https://github.com/matheusfreiitaz/-folha_de_ponto",
+          demoUrl: "https://fascinating-concha-8c4b73.netlify.app/",
+        },
+        {
+          title: "Sistema de Gestão de Tarefas",
+          image: "./cab.png",
+          techStack: ["React", "TypeScript", "Tailwind CSS"],
+          problem:
+            "Barbearias enfrentam desafios na administração de agendamentos, controle de clientes e organização dos serviços, o que pode gerar atrasos, falhas de comunicação e perda de fidelização dos clientes.",
+          solution:
+            "Desenvolvi uma aplicação moderna  gestão de tarefas com interface intuitiva, sistema de agendamento",
+          repoUrl: "https://github.com/matheusfreiitaz",
+          demoUrl: "https://tangerine-palmier-35bb78.netlify.app/",
+        },
+      ];
+
+      // =================================================================
+      // FUNÇÕES PRINCIPAIS
+      // =================================================================
+
+      function selectPath(path) {
+        document.getElementById("entryModal").classList.add("hidden");
+        document.getElementById("mainHeader").style.display = "block";
+
+        document.querySelectorAll("section[data-path]").forEach((section) => {
+          const paths = section.getAttribute("data-path").split(" ");
+          if (paths.includes(path)) {
+            section.classList.add("visible");
+          }
+        });
+        setTimeout(() => lucide.createIcons(), 100);
+      }
+
+      function toggleMobileMenu() {
+        const hamburger = document.getElementById("hamburger");
+        const navMobile = document.getElementById("navMobile");
+        const navOverlay = document.getElementById("navOverlay");
+
+        hamburger.classList.toggle("active");
+        navMobile.classList.toggle("active");
+        navOverlay.classList.toggle("active");
+
+        // Previne scroll quando menu está aberto
+        if (navMobile.classList.contains("active")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "auto";
+        }
+      }
+
+      function openProjectModal(index) {
+        const project = projects[index];
+        const modal = document.getElementById("projectModal");
+
+        document.getElementById("modalBackdrop").src = project.image;
+        document.getElementById("modalBackdrop").alt = project.title;
+        document.getElementById("modalTitle").textContent = project.title;
+        document.getElementById("modalProblem").textContent = project.problem;
+        document.getElementById("modalSolution").textContent = project.solution;
+        document.getElementById("modalRepoLink").href = project.repoUrl;
+        document.getElementById("modalDemoLink").href = project.demoUrl;
+
+        const techStackContainer = document.getElementById("modalTechStack");
+        techStackContainer.innerHTML = project.techStack
+          .map((tech) => `<span class="tech-tag">${tech}</span>`)
+          .join("");
+
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+
+        setTimeout(() => lucide.createIcons(), 100);
+      }
+
+      function closeProjectModal() {
+        document.getElementById("projectModal").classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      async function generateGitHubCard() {
+        const username = document.getElementById("githubUsername").value.trim();
+        const container = document.getElementById("cardContainer");
+        const codeSection = document.getElementById("codeSection");
+
+        if (!username) {
+          container.innerHTML =
+            '<p style="color: #ef4444; text-align: center; padding: 2rem;">⚠️ Por favor, digite um username válido.</p>';
+          return;
+        }
+
+        container.innerHTML = `
+                <div class="github-card">
+                    <div class="skeleton" style="width: 100px; height: 100px; border-radius: 50%; flex-shrink: 0;"></div>
+                    <div style="flex: 1; width: 100%;">
+                        <div class="skeleton" style="height: 24px; width: 180px; margin-bottom: 1rem; border-radius: 8px;"></div>
+                        <div class="skeleton" style="height: 16px; width: 100%; margin-bottom: 0.5rem; border-radius: 6px;"></div>
+                        <div class="skeleton" style="height: 16px; width: 85%; border-radius: 6px;"></div>
+                    </div>
+                </div>
+            `;
+
+        try {
+          const response = await fetch(
+            `https://api.github.com/users/${username}`
+          );
+
+          if (!response.ok) {
+            throw new Error("Usuário não encontrado");
+          }
+
+          const data = await response.json();
+
+          container.innerHTML = `
+                    <div class="github-card">
+                        <img src="${data.avatar_url}" alt="${
+            data.name
+          }" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid #3b82f6; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); flex-shrink: 0;">
+                        <div style="flex: 1;">
+                            <h3 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 0.5rem;">${
+                              data.name || data.login
+                            }</h3>
+                            <p style="color: #9ca3af; margin-bottom: 1.25rem; line-height: 1.7; font-size: 0.95rem;">${
+                              data.bio || "Sem bio disponível"
+                            }</p>
+                            <div style="display: flex; gap: 2rem; color: #9ca3af; margin-bottom: 1.25rem; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i data-lucide="users" style="width: 16px; height: 16px; color: #60a5fa;"></i>
+                                    <strong style="color: #e5e5e5; font-weight: 700;">${
+                                      data.followers
+                                    }</strong> seguidores
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i data-lucide="git-fork" style="width: 16px; height: 16px; color: #60a5fa;"></i>
+                                    <strong style="color: #e5e5e5; font-weight: 700;">${
+                                      data.public_repos
+                                    }</strong> repositórios
+                                </div>
+                            </div>
+                            <a href="${
+                              data.html_url
+                            }" target="_blank" class="btn-primary" style="display: inline-flex;">
+                                <i data-lucide="external-link" style="width: 18px; height: 18px;"></i>
+                                Ver Perfil no GitHub
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+          codeSection.style.display = "block";
+          setTimeout(() => lucide.createIcons(), 100);
+        } catch (error) {
+          container.innerHTML = `
+                    <div style="text-align: center; padding: 2.5rem; background: rgba(239, 68, 68, 0.1); border: 2px solid rgba(239, 68, 68, 0.3); border-radius: 16px;">
+                        <i data-lucide="alert-circle" style="width: 48px; height: 48px; color: #ef4444; margin-bottom: 1rem;"></i>
+                        <p style="color: #ef4444; font-weight: 700; font-size: 1.125rem; margin-bottom: 0.5rem;">Erro ao buscar usuário</p>
+                        <p style="color: #9ca3af; font-size: 0.95rem;">${error.message}. Verifique se o username está correto e tente novamente.</p>
+                    </div>
+                `;
+          setTimeout(() => lucide.createIcons(), 100);
+        }
+      }
+
+      function toggleCode() {
+        const codeBlock = document.getElementById("codeBlock");
+        const buttonText = document.getElementById("codeButtonText");
+
+        const isHidden =
+          codeBlock.style.display === "none" || codeBlock.style.display === "";
+        codeBlock.style.display = isHidden ? "block" : "none";
+        buttonText.textContent = isHidden
+          ? "Esconder o Código"
+          : "Ver o Código por Trás";
+      }
+
+      function downloadResume() {
+        // !! ATENÇÃO: Substitua '#' pelo link real do seu currículo em PDF !!
+        const resumeUrl = "https://docs.google.com/document/d/1evla8MrEMhs-s13QFxONkBf1P8p9GAHQ/edit?usp=sharing&ouid=110801328417730891019&rtpof=true&sd=true";
+
+        if (resumeUrl === "#") {
+          alert(
+            "⚠️ O link para o download do currículo ainda não foi configurado neste código."
+          );
+        } else {
+          window.open(resumeUrl, "_blank");
+        }
+      }
+
+      // =================================================================
+      // INICIALIZAÇÃO
+      // =================================================================
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+
+        // Scroll header effect
+        window.addEventListener("scroll", () => {
+          const header = document.getElementById("mainHeader");
+          if (!header) return;
+          header.classList.toggle("scrolled", window.scrollY > 50);
+        });
+
+       // Smooth scroll for anchor links
+// O seletor agora só pega links que começam com #, mas que não são APENAS #
+document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+        // Close modal on outside click
+        document
+          .getElementById("projectModal")
+          .addEventListener("click", (e) => {
+            if (e.target.id === "projectModal") {
+              closeProjectModal();
+            }
+          });
+
+        // GitHub input enter key
+        const githubInput = document.getElementById("githubUsername");
+        if (githubInput) {
+          githubInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              generateGitHubCard();
+            }
+          });
+          // Load default profile
+          generateGitHubCard();
+        }
+      });
+    </script>
+  </body>
+</html>
