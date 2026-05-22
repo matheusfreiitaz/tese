@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bolsa Família — Verificação de Elegibilidade</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== CABEÇALHO ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="brand-icon" aria-hidden="true"></div>
+        <div class="brand-text">
+          <span class="brand-name">Bolsa Família</span>
+          <span class="brand-sub">Verificação de Elegibilidade</span>
+        </div>
+      </div>
+      <div class="header-badge">Governo Federal</div>
+    </div>
+  </header>
+
+  <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+  <main class="main-content">
+
+    <!-- BARRA DE PROGRESSO -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-steps">
+        <div class="progress-step active" id="step-indicator-1">
+          <div class="step-dot">1</div>
+          <span class="step-label">Elegibilidade</span>
+        </div>
+        <div class="progress-line" id="line-1-2"></div>
+        <div class="progress-step" id="step-indicator-2">
+          <div class="step-dot">2</div>
+          <span class="step-label">Composição</span>
+        </div>
+        <div class="progress-line" id="line-2-3"></div>
+        <div class="progress-step" id="step-indicator-3">
+          <div class="step-dot">3</div>
+          <span class="step-label">Resultado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================
+         ETAPA 1 — VERIFICAÇÃO DE ELEGIBILIDADE
+    ======================================= -->
+    <section class="card" id="step1">
+
+      <div class="card-header">
+        <h1 class="card-title">Você é elegível ao Bolsa Família?</h1>
+        <p class="card-description">
+          Preencha os dados abaixo para verificarmos se sua família atende
+          aos critérios básicos do programa.
+        </p>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Campo: Renda per capita -->
+        <div class="field-group" id="group-renda">
+          <label class="field-label" for="rendaPerCapita">
+            Renda per capita familiar
+            <span class="field-tip">Renda total ÷ número de pessoas na casa</span>
+          </label>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">R$</span>
+            <input
+              type="number"
+              id="rendaPerCapita"
+              class="field-input"
+              placeholder="0,00"
+              min="0"
+              step="0.01"
+              aria-describedby="rendaHelp"
+            />
+          </div>
+          <span class="field-hint" id="rendaHelp">
+            Limite máximo para elegibilidade: <strong>R$ 218,00</strong> por pessoa
+          </span>
+          <span class="field-error hidden" id="rendaError" role="alert"></span>
+        </div>
+
+        <!-- Campo: CadÚnico -->
+        <div class="field-group" id="group-cadUnico">
+          <label class="field-label">
+            Possui cadastro no CadÚnico?
+            <span class="field-tip">Cadastro Único para Programas Sociais do Governo Federal</span>
+          </label>
+          <div class="radio-group" role="radiogroup" aria-labelledby="cadUnicoLabel">
+            <label class="radio-card" id="radioSim">
+              <input type="radio" name="cadUnico" id="cadUnicoSim" value="sim" />
+              <span class="radio-indicator"></span>
+              <span class="radio-text">
+                <strong>Sim</strong>
+                <small>Tenho cadastro ativo</small>
+              </span>
+            </label>
+            <label class="radio-card" id="radioNao">
+              <input type="radio" name="cadUnico" id="cadUnicoNao" value="nao" />
+              <span class="radio-indicator"></span>
+              <span class="radio-text">
+                <strong>Não</strong>
+                <small>Não possuo cadastro</small>
+              </span>
+            </label>
+          </div>
+          <span class="field-error hidden" id="cadUnicoError" role="alert"></span>
+        </div>
+
+        <!-- Botão avançar etapa 1 -->
+        <button class="btn btn-primary btn-full" id="btnStep1" type="button">
+          Verificar elegibilidade
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ======================================
+         ETAPA 2 — COMPOSIÇÃO FAMILIAR
+    ======================================= -->
+    <section class="card hidden" id="step2">
+
+      <div class="card-header">
+        <h2 class="card-title">Composição da sua família</h2>
+        <p class="card-description">
+          Informe quantas pessoas compõem sua família para calcularmos
+          o valor exato do seu benefício.
+        </p>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Campo: Total de pessoas -->
+        <div class="field-group" id="group-totalPessoas">
+          <label class="field-label" for="totalPessoas">
+            Total de pessoas na família
+            <span class="field-tip">Incluindo todas as faixas etárias</span>
+          </label>
+          <div class="counter-wrap">
+            <button class="counter-btn" type="button" id="btnTotalMinus" aria-label="Diminuir">−</button>
+            <input
+              type="number"
+              id="totalPessoas"
+              class="field-input counter-input"
+              value="0"
+              min="1"
+              max="30"
+              aria-label="Total de pessoas"
+            />
+            <button class="counter-btn" type="button" id="btnTotalPlus" aria-label="Aumentar">+</button>
+          </div>
+          <span class="field-error hidden" id="totalPessoasError" role="alert"></span>
+        </div>
+
+        <div class="divider">
+          <span>Detalhamento por faixa etária</span>
+        </div>
+
+        <!-- Campo: Crianças 0-6 anos -->
+        <div class="field-group" id="group-criancas06">
+          <label class="field-label" for="criancas06">
+            <span class="age-badge badge-green">0 – 6 anos</span>
+            Crianças
+            <span class="field-tip">+R$ 150,00 por criança</span>
+          </label>
+          <div class="counter-wrap">
+            <button class="counter-btn" type="button" id="btnC06Minus" aria-label="Diminuir">−</button>
+            <input
+              type="number"
+              id="criancas06"
+              class="field-input counter-input"
+              value="0"
+              min="0"
+              max="30"
+              aria-label="Crianças de 0 a 6 anos"
+            />
+            <button class="counter-btn" type="button" id="btnC06Plus" aria-label="Aumentar">+</button>
+          </div>
+          <span class="field-error hidden" id="criancas06Error" role="alert"></span>
+        </div>
+
+        <!-- Campo: Crianças/Adolescentes 7-18 anos -->
+        <div class="field-group" id="group-criancas718">
+          <label class="field-label" for="criancas718">
+            <span class="age-badge badge-blue">7 – 18 anos</span>
+            Crianças e adolescentes
+            <span class="field-tip">+R$ 50,00 por pessoa</span>
+          </label>
+          <div class="counter-wrap">
+            <button class="counter-btn" type="button" id="btnC718Minus" aria-label="Diminuir">−</button>
+            <input
+              type="number"
+              id="criancas718"
+              class="field-input counter-input"
+              value="0"
+              min="0"
+              max="30"
+              aria-label="Crianças e adolescentes de 7 a 18 anos"
+            />
+            <button class="counter-btn" type="button" id="btnC718Plus" aria-label="Aumentar">+</button>
+          </div>
+          <span class="field-error hidden" id="criancas718Error" role="alert"></span>
+        </div>
+
+        <!-- Campo: Gestantes -->
+        <div class="field-group" id="group-gestantes">
+          <label class="field-label" for="gestantes">
+            <span class="age-badge badge-pink">Gestação</span>
+            Gestantes na família
+            <span class="field-tip">+R$ 50,00 por gestante</span>
+          </label>
+          <div class="counter-wrap">
+            <button class="counter-btn" type="button" id="btnGestMinus" aria-label="Diminuir">−</button>
+            <input
+              type="number"
+              id="gestantes"
+              class="field-input counter-input"
+              value="0"
+              min="0"
+              max="10"
+              aria-label="Gestantes"
+            />
+            <button class="counter-btn" type="button" id="btnGestPlus" aria-label="Aumentar">+</button>
+          </div>
+          <span class="field-error hidden" id="gestantesError" role="alert"></span>
+        </div>
+
+        <!-- Preview do cálculo em tempo real -->
+        <div class="preview-box" id="previewBox">
+          <div class="preview-title">Prévia do benefício</div>
+          <div class="preview-breakdown" id="previewBreakdown">
+            <div class="preview-line">
+              <span>Benefício base</span>
+              <span>R$ 600,00</span>
+            </div>
+            <div class="preview-line preview-extra hidden" id="prevC06Line">
+              <span id="prevC06Label">Crianças 0–6 anos</span>
+              <span id="prevC06Value">+ R$ 0,00</span>
+            </div>
+            <div class="preview-line preview-extra hidden" id="prevC718Line">
+              <span id="prevC718Label">Jovens 7–18 anos</span>
+              <span id="prevC718Value">+ R$ 0,00</span>
+            </div>
+            <div class="preview-line preview-extra hidden" id="prevGestLine">
+              <span id="prevGestLabel">Gestantes</span>
+              <span id="prevGestValue">+ R$ 0,00</span>
+            </div>
+          </div>
+          <div class="preview-total">
+            <span>Total estimado</span>
+            <span id="previewTotal">R$ 600,00</span>
+          </div>
+        </div>
+
+        <!-- Botões da etapa 2 -->
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="btnBackStep2" type="button">
+            ← Voltar
+          </button>
+          <button class="btn btn-primary" id="btnStep2" type="button">
+            Calcular benefício
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================
+         RESULTADO — ELEGÍVEL
+    ======================================= -->
+    <section class="card result-card hidden" id="resultElegivel">
+
+      <div class="result-icon result-icon--success" aria-hidden="true">✓</div>
+
+      <div class="card-header">
+        <h2 class="card-title">Parabéns! Você é elegível.</h2>
+        <p class="card-description">
+          Sua família atende aos critérios do programa Bolsa Família.
+          Veja abaixo o valor estimado do seu benefício mensal.
+        </p>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Valor principal do benefício -->
+        <div class="benefit-display">
+          <div class="benefit-label">Benefício mensal estimado</div>
+          <div class="benefit-value" id="benefitValue">R$ 600,00</div>
+          <div class="benefit-disclaimer">* Valor sujeito à confirmação pelo Governo Federal</div>
+        </div>
+
+        <!-- Detalhamento -->
+        <div class="breakdown-card">
+          <h3 class="breakdown-title">Composição do benefício</h3>
+          <ul class="breakdown-list" id="breakdownList">
+            <!-- Preenchido via JavaScript -->
+            <li class="breakdown-item">
+              <span class="breakdown-label">Benefício base</span>
+              <span class="breakdown-value">R$ 600,00</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Próximos passos -->
+        <div class="next-steps">
+          <h3 class="next-steps-title">Próximos passos</h3>
+          <ol class="next-steps-list">
+            <li>Compareça a um <strong>CRAS</strong> (Centro de Referência de Assistência Social) da sua cidade</li>
+            <li>Leve documentos de <strong>todos os membros</strong> da família (CPF, certidão de nascimento)</li>
+            <li>Confirme ou atualize seu <strong>CadÚnico</strong></li>
+          </ol>
+        </div>
+
+        <!-- Botão reiniciar -->
+        <button class="btn btn-ghost btn-full" id="btnResetFromSuccess" type="button">
+          Fazer nova consulta
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ======================================
+         RESULTADO — INELEGÍVEL
+    ======================================= -->
+    <section class="card result-card hidden" id="resultInelegivel">
+
+      <div class="result-icon result-icon--fail" aria-hidden="true">✗</div>
+
+      <div class="card-header">
+        <h2 class="card-title">Família não elegível</h2>
+        <p class="card-description">
+          Com base nos dados informados, sua família <strong>não atende</strong>
+          aos critérios atuais do Bolsa Família.
+        </p>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Motivos da inelegibilidade -->
+        <div class="inelegivel-reasons">
+          <h3 class="reasons-title">Motivo(s) identificado(s):</h3>
+          <ul class="reasons-list" id="reasonsList">
+            <!-- Preenchido via JavaScript -->
+          </ul>
+        </div>
+
+        <!-- Informação de apoio -->
+        <div class="info-box">
+          <strong>Precisa de ajuda?</strong>
+          <p>
+            Para dúvidas sobre o Bolsa Família, procure o
+            <strong>CRAS</strong> mais próximo ou acesse
+            <em>mds.gov.br/bolsafamilia</em>.
+          </p>
+        </div>
+
+        <!-- Botão reiniciar -->
+        <button class="btn btn-ghost btn-full" id="btnResetFromFail" type="button">
+          Fazer nova consulta
+        </button>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer class="site-footer">
+    <p>Sistema de verificação não oficial. Dados meramente informativos.</p>
+    <p>Para informações oficiais, acesse <strong>gov.br/bolsafamilia</strong>.</p>
+  </footer>
+
+  <!-- JavaScript será vinculado aqui -->
+  <script src="script.js"></script>
+
+</body>
+</html>
