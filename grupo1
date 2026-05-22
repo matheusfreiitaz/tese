@@ -1,0 +1,52 @@
+const usuario = "xxxxx"        
+const senha = "xxxxxx";
+
+let endereco = "Rua 1 , 123, Ribeirão das Neves ";
+
+const perfume1 = "Sakura";
+const perfume2 = "Tokyo Night";
+const perfume3 = "Imperial Gold";
+
+const precoPerfume1= 80
+const precoPerfume2= 120 
+const precoPerfume3= 150 
+
+let quantidadePerfume1 = 100
+let quantidadePerfume2 = 100
+let quantidadePerfume3 = 100
+
+let saldo = 100000000;
+
+let escolha = 1
+
+let quantidade = 1
+if (escolha === 1) {
+
+    preco = 80;
+
+    console.log("Você escolheu: " + perfume1);
+
+} else if (escolha === 2) 
+
+    {preco = 120;
+
+    console.log("Você escolheu: " + perfume2);
+
+} else; 
+
+    {preco = 150;
+
+    console.log("Você escolheu: " + perfume3);}
+
+
+if (saldo >= preco) {
+
+    console.log("Compra realizada com sucesso!");
+
+    console.log("Entrega será feita em: " + endereco);
+
+} else; {
+
+    console.log("Saldo insuficiente")
+}
+//
