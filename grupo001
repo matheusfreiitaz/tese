@@ -5,6 +5,6 @@ Use estas pistas para encontrar e corrigir o erro no código.
 • Observe a operação matemática usada no cálculo.
 • Teste o código com valores, vetores e variáveis simples, como perfume 80 e quantidade 2.
 • Pesquise sobre conversão de tipos usando Number().
-• Pense se o operador utilizado está correto para calcular compra total.
-Objetivo Final:
+• Pense se o operador utilizado está correto para calcular compra total. 
+Objetivo Final: 
 Fazer o sistema calcular corretamente o valor total da compra
